@@ -79,16 +79,22 @@ public:
 			Block *temp1 = NULL;
 			int count = 0;
 			//cout<<"\n\n";
-			for(temp1 = temp->next; temp1!=NULL; temp1=temp1->next, ++count)
+			for(temp1 = temp; temp1->next!=NULL; temp1=temp1->next, ++count)
 			{
 				//cout<<"Count = "<<count<<" "<<temp1->tag<<endl;
-				if(temp1->tag == tag)
+				if(temp1->next->tag == tag)
 				{
-					cout<<"Hit";
+					if(replacementPolicy == 1)
+					{
+						Block *temp2 = temp1->next;
+						temp1->next = temp2->next;
+						temp2->next = temp->next;
+						temp->next = temp2;
+					}
 					break;
 				}
 			}
-			if(!temp1)
+			if(!temp1->next)
 			{
 				temp1 = new Block();
 				temp1->next = NULL;
@@ -116,10 +122,17 @@ public:
 		else
 		{
 			Block *temp1 = NULL;
-			for(temp1 = temp->next;temp1;temp1 = temp1->next)
+			for(temp1 = temp;temp1->next;temp1 = temp1->next)
 			{
-				if(temp1->tag == tag)
+				if(temp1->next->tag == tag)
 				{
+					if(replacementPolicy == 1)
+					{
+						Block *temp2 = temp1->next;
+						temp1->next = temp2->next;
+						temp2->next = temp->next;
+						temp->next = temp2;
+					}
 					return true;
 				}
 			}
