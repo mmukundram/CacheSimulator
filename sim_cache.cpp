@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 		//Set l2.blockSize
 	
 		sscanf(argv[2],"%d", &l1Size);
-		l1.size = l1Size * 1024;
+		l1.size = l1Size;
 
 		sscanf(argv[3],"%d", &l1Associativity);
 		l1.associativity = l1Associativity;
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 			//Cache::printMessage("Trace file found.");
 		}
 		char inputBuffer[100], accessMethod[5], offset[10], index[10], tag[100];
-	
+		
 		while(true)
 		{
 			fscanf(traceFile,"%s",accessMethod);
@@ -196,11 +196,11 @@ int main(int argc, char **argv)
 				//cout<<"Read\n";
 				if(l1.read(indexString,tagString))
 				{
-					cout<<"Hit\n";
+					//cout<<"Hit\n";
 				}
 				else
 				{
-					cout<<"Miss\n";
+					//cout<<"Miss\n";
 				}
 			}
 			else if(strcmp(accessMethod,"w") == 0)
@@ -211,9 +211,10 @@ int main(int argc, char **argv)
 				
 
 		}
+		
 
-
-		//l1.printCacheDetails();
+		l1.printCacheDetails();
+		l1.printCacheStatus();
 
 		
 

@@ -12,21 +12,23 @@ class Cache
 public:
 	Cache()
 	{
-		hits = misses = reads = writes = 0;
+		readHits = writeHits = readMisses = writeMisses = reads = writes = 0;
 	}
 	void initializeCache()
 	{
 		numberOfBlocks = size/blockSize;
 		//blocks = new Block[numberOfBlocks];	
 		offsetWidth = log(blockSize)/log(2);
-		int sets = size/(associativity*blockSize);
-		indexWidth = log(sets)/log(2) - 1;
+		numberOfSets = size/(associativity*blockSize);
+		indexWidth = log(numberOfSets)/log(2);
 		tagWidth = INPUT_SIZE - offsetWidth - indexWidth;
 		
 	}
-	int hits;
-	int misses;
+	int readHits;
+	int readMisses;
 	int reads;
+	int writeHits;
+	int writeMisses;
 	int writes;
 	int size;
 	int blockSize;
@@ -34,6 +36,7 @@ public:
 	int replacementPolicy;
 	int inclusion;
 	int numberOfBlocks;
+	int numberOfSets;
 	map <string,Block*> sets;			//Has numberOfBlocks/associativity elements
 
 	int offsetWidth;
@@ -44,30 +47,41 @@ public:
 	{
 		cout<<"CACHE DETAILS"
 		<<"\nCache size = "<<size
+		<<"\nNumber of blocks = "<<numberOfBlocks
 		<<"\nBlock size = "<<blockSize
 		<<"\nAssociativity = "<<associativity
 		<<"\nReplacement policy = "<<replacementPolicy
+		<<"\nSets = "<<numberOfSets
 		<<"\nOffset width = "<<offsetWidth
 		<<"\nIndex width = "<<indexWidth
 		<<"\nTag width = "<<tagWidth<<"\n";
 	}
-
+	void printCacheStatus()
+	{
+		cout<<"CACHE STATUS"
+		<<"\nRead hits = "<<readHits
+		<<"\nRead misses = "<<readMisses
+		<<"\nReads = "<<reads
+		<<"\nWrite hits = "<<writeHits
+		<<"\nWrite misses = "<<writeMisses
+		<<"\nWrites = "<<writes<<"\n";
+	}
 	static void printErrorMessage(string message)
 	{
 		cout<<"Error :"<<message<<"\n";
 	}
-
 	static void printMessage(string message)
 	{
 		cout<<"Message :"<<message<<"\n";
 	}
-
 	void write(string index, string tag)
 	{
+		++writes;
 		//cout<<"Write called with "<<tag<<endl;
 		Block *temp = NULL;
 		if(sets[index] == NULL)
 		{
+			++writeMisses;
 			sets[index] = new Block();
 			temp = sets[index];
 			temp->next = new Block();
@@ -84,6 +98,7 @@ public:
 				//cout<<"Count = "<<count<<" "<<temp1->tag<<endl;
 				if(temp1->next->tag == tag)
 				{
+					++writeHits;
 					if(replacementPolicy == 1)
 					{
 						Block *temp2 = temp1->next;
@@ -91,32 +106,32 @@ public:
 						temp2->next = temp->next;
 						temp->next = temp2;
 					}
-					break;
+					return;
 				}
 			}
-			if(!temp1->next)
+			++writeMisses;
+			temp1 = new Block();
+			temp1->next = NULL;
+			temp1->tag = tag;
+			temp1->next = temp->next;
+			temp->next = temp1;
+			if(count == associativity)
 			{
-				temp1 = new Block();
+				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
+				delete temp1->next;
 				temp1->next = NULL;
-				temp1->tag = tag;
-				temp1->next = temp->next;
-				temp->next = temp1;
-				if(count == associativity)
-				{
-					for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
-					delete temp1->next;
-					temp1->next = NULL;
-				}
 			}
 		}
 	}
 	bool read(string index, string tag)
 	{
+		++reads;
 		Block *temp = NULL;
 		temp = sets[index];
 
 		if(!temp)
 		{
+			++readMisses;
 			return false;
 		}
 		else
@@ -126,6 +141,7 @@ public:
 			{
 				if(temp1->next->tag == tag)
 				{
+					++readHits;
 					if(replacementPolicy == 1)
 					{
 						Block *temp2 = temp1->next;
@@ -136,6 +152,7 @@ public:
 					return true;
 				}
 			}
+			++readMisses;
 			return false;
 		}
 	}
