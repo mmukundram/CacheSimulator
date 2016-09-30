@@ -106,15 +106,18 @@ public:
 						temp2->next = temp->next;
 						temp->next = temp2;
 					}
-					return;
+					break;
 				}
 			}
-			++writeMisses;
-			temp1 = new Block();
-			temp1->next = NULL;
-			temp1->tag = tag;
-			temp1->next = temp->next;
-			temp->next = temp1;
+			if(!temp1->next)
+			{
+				++writeMisses;
+				temp1 = new Block();
+				temp1->next = NULL;
+				temp1->tag = tag;
+				temp1->next = temp->next;
+				temp->next = temp1;
+			}
 			if(count == associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
