@@ -1,7 +1,3 @@
-#include<string>
-
-using namespace std;
-
 class Block
 {
 public:
@@ -9,11 +5,9 @@ public:
 	{
 		valid = false;
 		dirty = false;
-		next = NULL;
 	}
-	Block *next;
 	bool valid;
-	string tag;
+	char *tag;
 	bool dirty;
 };
 
