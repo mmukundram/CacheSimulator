@@ -1,126 +1,11 @@
-//g++ ./a.out 64 16 4 32 4 0 0 GCC.t
 #include<iostream>
 #include<stdio.h>
 #include<string>
-#include<string.h>
 #include"Cache.h"
 
 
 using namespace std;
 
-string convertHexToBin(string in)
-{
-	int i,j=0;
-	char inputCharArray[100];
-	for(i=0;i<in.length();++i)
-	{
-		switch(in.at(i))
-		{
-		case '0':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			break;
-		case '1':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			break;
-		case '2':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';	
-			break;
-		case '3':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			break;
-		case '4':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			break;
-		case '5':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			break;
-		case '6':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			break;
-		case '7':
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			break;
-		case '8':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			break;
-		case '9':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			break;
-		case 'a':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			break;
-		case 'b':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			break;
-		case 'c':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='0';
-			break;
-		case 'd':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			inputCharArray[j++]='1';
-			break;
-		case 'e':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='0';
-			break;
-		case 'f':
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			inputCharArray[j++]='1';
-			break;
-		default:
-			Cache::printErrorMessage("Invalid input.");
-		}
-	}
-	inputCharArray[j] = '\0';
-	string input(inputCharArray);
-	//cout<<input;
-	return input;
-}
 
 int main(int argc, char **argv)
 {	
@@ -138,7 +23,7 @@ int main(int argc, char **argv)
 		//Set l2.blockSize
 	
 		sscanf(argv[2],"%d", &l1Size);
-		l1.size = l1Size;
+		l1.size = l1Size * 1024;
 
 		sscanf(argv[3],"%d", &l1Associativity);
 		l1.associativity = l1Associativity;
@@ -167,54 +52,22 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			//Cache::printMessage("Trace file found.");
+			Cache::printMessage("Trace file found.");
 		}
 		char inputBuffer[100], accessMethod[5], offset[10], index[10], tag[100];
-		
-		while(true)
+	
+		//while(!feof(traceFile))
 		{
 			fscanf(traceFile,"%s",accessMethod);
-			if(feof(traceFile))
-			{
-				break;
-			}
 			fscanf(traceFile,"%s",inputBuffer);
-			string in(inputBuffer);
-			//cout<<"Converting "<<in<<" to Bin.\n";
-			string input = convertHexToBin(in);
+			string input(inputBuffer);
 			input.copy(offset,l1.offsetWidth,input.length()-l1.offsetWidth);
-			input.copy(index,l1.indexWidth,input.length()-l1.offsetWidth-l1.indexWidth);
-			input.copy(tag,input.length()-l1.offsetWidth-l1.indexWidth,0);
-			//cout<<"\nOffset = "<<offset<<endl;
-			//cout<<"\nIndex = "<<index<<endl;
-			//cout<<"\nTag = "<<tag<<endl;
-			//cout<<accessMethod<<" "<<inputBuffer<<endl;
-			string tagString(tag);
-			string indexString(index);	
-			if(strcmp(accessMethod,"r") == 0)
-			{
-				//cout<<"Read\n";
-				if(l1.read(indexString,tagString))
-				{
-					//cout<<"Hit\n";
-				}
-				else
-				{
-					//cout<<"Miss\n";
-				}
-			}
-			else if(strcmp(accessMethod,"w") == 0)
-			{
-				//cout<<"Write\n";
-				l1.write(indexString,tagString);			
-			}
-				
-
+			cout<<"Offset = "<<offset<<endl;
+			cout<<accessMethod<<" "<<inputBuffer<<endl;
 		}
-		
+
 
 		l1.printCacheDetails();
-		l1.printCacheStatus();
 
 		
 
@@ -223,6 +76,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
+		//Define error method
 		Cache::printErrorMessage("Improper arguments.");
 	}
 
