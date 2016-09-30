@@ -3,6 +3,7 @@
 #include<string>
 #include<math.h>
 #include<map>
+#include<vector>
 #define INPUT_SIZE 64
 
 using namespace std;
@@ -10,6 +11,7 @@ using namespace std;
 class Cache
 {
 public:
+	vector<string> setNames;
 	Cache()
 	{
 		readHits = writeHits = readMisses = writeMisses = reads = writes = 0;
@@ -43,6 +45,22 @@ public:
 	int indexWidth;
 	int tagWidth; 
 
+	void displayContent()
+	{
+		Block *temp = NULL;
+		int i;
+		for(i=0;i<setNames.size();++i)
+		{
+			temp = sets[setNames[i]];
+			cout<<setNames[i]<<" ";
+			while(temp)
+			{
+				cout<<temp->tag<<" ";
+				temp = temp->next;
+			}
+			cout<<"\n";
+		}
+	}
 	void printCacheDetails()
 	{
 		cout<<"CACHE DETAILS"
@@ -77,10 +95,11 @@ public:
 	void write(string index, string tag)
 	{
 		++writes;
-		//cout<<"Write called with "<<tag<<endl;
+		//cout<<"Write called with tag "<<tag<<" and index "<<index<<endl;
 		Block *temp = NULL;
 		if(sets[index] == NULL)
 		{
+			setNames.push_back(index);
 			++writeMisses;
 			sets[index] = new Block();
 			temp = sets[index];
@@ -128,23 +147,33 @@ public:
 	}
 	bool read(string index, string tag)
 	{
+		//cout<<"Read called with tag "<<tag<<" and index "<<index<<endl;
 		++reads;
 		Block *temp = NULL;
 		temp = sets[index];
 
 		if(!temp)
 		{
+			setNames.push_back(index);
 			++readMisses;
+			sets[index] = new Block();
+			temp = sets[index];
+			temp->next = new Block();
+			temp->next->tag = tag;
 			return false;
 		}
 		else
 		{
+			temp = sets[index];
 			Block *temp1 = NULL;
-			for(temp1 = temp;temp1->next;temp1 = temp1->next)
+			int count = 0;
+			//cout<<"\n\n";
+			for(temp1 = temp; temp1->next!=NULL; temp1=temp1->next, ++count)
 			{
+				//cout<<"Count = "<<count<<" "<<temp1->tag<<endl;
 				if(temp1->next->tag == tag)
 				{
-					++readHits;
+					++writeHits;
 					if(replacementPolicy == 1)
 					{
 						Block *temp2 = temp1->next;
@@ -152,11 +181,24 @@ public:
 						temp2->next = temp->next;
 						temp->next = temp2;
 					}
-					return true;
+					break;
 				}
 			}
-			++readMisses;
-			return false;
+			if(!temp1->next)
+			{
+				++readMisses;
+				temp1 = new Block();
+				temp1->next = NULL;
+				temp1->tag = tag;
+				temp1->next = temp->next;
+				temp->next = temp1;
+			}
+			if(count == associativity)
+			{
+				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
+				delete temp1->next;
+				temp1->next = NULL;
+			}
 		}
 	}
 };

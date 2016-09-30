@@ -193,7 +193,8 @@ int main(int argc, char **argv)
 			string indexString(index);	
 			if(strcmp(accessMethod,"r") == 0)
 			{
-				//cout<<"Read\n";
+				//cout<<"Read "<<tagString<<" from "<<indexString<<"\n";
+				//l1.displayContent();
 				if(l1.read(indexString,tagString))
 				{
 					//cout<<"Hit\n";
@@ -205,7 +206,8 @@ int main(int argc, char **argv)
 			}
 			else if(strcmp(accessMethod,"w") == 0)
 			{
-				//cout<<"Write\n";
+				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
+				//l1.displayContent();
 				l1.write(indexString,tagString);			
 			}
 				
