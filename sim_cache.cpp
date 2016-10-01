@@ -196,21 +196,36 @@ int main(int argc, char **argv)
 				else
 				{
 					//cout<<"Miss\n";
+					if(l1.inclusion == 1)
+					{
+						l2.read(input);
+					}
 				}
 			}
 			else if(strcmp(accessMethod,"w") == 0)
 			{
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
 				//l1.displayContent();
-				l1.write(input);			
+				if(l1.write(input))
+				{
+				}
+				else
+				{
+					if(l1.inclusion == 1)
+					{
+						l2.write(input);
+					}
+				}			
 			}
 				
 
 		}
 		
 
-		l1.printCacheDetails();
+		//l1.printCacheDetails();
 		l1.printCacheStatus();
+		//l2.printCacheDetails();
+		l2.printCacheStatus();
 
 		
 

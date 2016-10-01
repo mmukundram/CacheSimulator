@@ -93,6 +93,17 @@ public:
 	{
 		cout<<"Message :"<<message<<"\n";
 	}
+	bool remove(string input)
+	{
+		bool returnValue;
+		char offsetArray[20], indexArray[20], tagArray[100];
+		input.copy(offsetArray,offsetWidth,input.length()-offsetWidth);
+		offsetArray[offsetWidth] = '\0';
+		input.copy(indexArray,indexWidth,input.length()-offsetWidth-indexWidth);
+		indexArray[indexWidth] = '\0';
+		input.copy(tagArray,input.length()-offsetWidth-indexWidth,0);
+		tagArray[input.length()-offsetWidth-indexWidth] = '\0';
+	}
 	bool write(string input)		
 	{
 		bool returnValue;
@@ -100,8 +111,11 @@ public:
 		//cout<<"Write called with tag "<<tag<<" and index "<<index<<endl;
 		char offsetArray[20], indexArray[20], tagArray[100];
 		input.copy(offsetArray,offsetWidth,input.length()-offsetWidth);
+		offsetArray[offsetWidth] = '\0';
 		input.copy(indexArray,indexWidth,input.length()-offsetWidth-indexWidth);
+		indexArray[indexWidth] = '\0';
 		input.copy(tagArray,input.length()-offsetWidth-indexWidth,0);
+		tagArray[input.length()-offsetWidth-indexWidth] = '\0';
 		//cout<<"\nOffset = "<<offset<<endl;
 		//cout<<"\nIndex = "<<index<<endl;
 		//cout<<"\nTag = "<<tag<<endl;
@@ -169,8 +183,11 @@ public:
 		++reads;
 		char offsetArray[20], indexArray[20], tagArray[100];
 		input.copy(offsetArray,offsetWidth,input.length()-offsetWidth);
+		offsetArray[offsetWidth] = '\0';
 		input.copy(indexArray,indexWidth,input.length()-offsetWidth-indexWidth);
+		indexArray[indexWidth] = '\0';
 		input.copy(tagArray,input.length()-offsetWidth-indexWidth,0);
+		tagArray[input.length()-offsetWidth-indexWidth] = '\0';
 		//cout<<"\nOffset = "<<offset<<endl;
 		//cout<<"\nIndex = "<<index<<endl;
 		//cout<<"\nTag = "<<tag<<endl;
