@@ -133,7 +133,7 @@ public:
 				{
 					++writeHits;
 					returnValue = true;
-					if(replacementPolicy == 1)
+					if(replacementPolicy == 0)
 					{
 						Block *temp2 = temp1->next;
 						temp1->next = temp2->next;
@@ -204,7 +204,7 @@ public:
 				{
 					++readHits;
 					returnValue = true;
-					if(replacementPolicy == 1)
+					if(replacementPolicy == 0)
 					{
 						Block *temp2 = temp1->next;
 						temp1->next = temp2->next;
