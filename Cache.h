@@ -51,7 +51,7 @@ public:
 		int i;
 		for(i=0;i<setNames.size();++i)
 		{
-			temp = sets[setNames[i]];
+			temp = sets[setNames[i]]->next;
 			cout<<setNames[i]<<" ";
 			while(temp)
 			{
@@ -93,8 +93,9 @@ public:
 	{
 		cout<<"Message :"<<message<<"\n";
 	}
-	void write(string input)		
+	bool write(string input)		
 	{
+		bool returnValue;
 		++writes;
 		//cout<<"Write called with tag "<<tag<<" and index "<<index<<endl;
 		char offsetArray[20], indexArray[20], tagArray[100];
@@ -113,6 +114,7 @@ public:
 		{
 			setNames.push_back(index);
 			++writeMisses;
+			returnValue = false;
 			sets[index] = new Block();
 			temp = sets[index];
 			temp->next = new Block();
@@ -130,6 +132,7 @@ public:
 				if(temp1->next->tag == tag)
 				{
 					++writeHits;
+					returnValue = true;
 					if(replacementPolicy == 1)
 					{
 						Block *temp2 = temp1->next;
@@ -140,9 +143,10 @@ public:
 					break;
 				}
 			}
-			if(!temp1->next)
+			if(!temp1->next && !returnValue)
 			{
 				++writeMisses;
+				returnValue = false;
 				temp1 = new Block();
 				temp1->next = NULL;
 				temp1->tag = tag;
@@ -156,9 +160,11 @@ public:
 				temp1->next = NULL;
 			}
 		}
+		return returnValue;
 	}
 	bool read(string input)
 	{
+		bool returnValue;
 		//cout<<"Read called with tag "<<tag<<" and index "<<index<<endl;
 		++reads;
 		char offsetArray[20], indexArray[20], tagArray[100];
@@ -178,6 +184,7 @@ public:
 		{
 			setNames.push_back(index);
 			++readMisses;
+			returnValue = false;
 			sets[index] = new Block();
 			temp = sets[index];
 			temp->next = new Block();
@@ -195,7 +202,8 @@ public:
 				//cout<<"Count = "<<count<<" "<<temp1->tag<<endl;
 				if(temp1->next->tag == tag)
 				{
-					++writeHits;
+					++readHits;
+					returnValue = true;
 					if(replacementPolicy == 1)
 					{
 						Block *temp2 = temp1->next;
@@ -206,9 +214,10 @@ public:
 					break;
 				}
 			}
-			if(!temp1->next)
+			if(!temp1->next && !returnValue)
 			{
 				++readMisses;
+				returnValue = false;
 				temp1 = new Block();
 				temp1->next = NULL;
 				temp1->tag = tag;
@@ -222,6 +231,7 @@ public:
 				temp1->next = NULL;
 			}
 		}
+		return returnValue;
 	}
 };
 
