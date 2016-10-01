@@ -82,7 +82,8 @@ public:
 		<<"\nReads = "<<reads
 		<<"\nWrite hits = "<<writeHits
 		<<"\nWrite misses = "<<writeMisses
-		<<"\nWrites = "<<writes<<"\n";
+		<<"\nWrites = "<<writes
+		<<"\nMiss rate = "<<(float)(readMisses+writeMisses)/(reads+writes)<<"\n";
 	}
 	static void printErrorMessage(string message)
 	{
