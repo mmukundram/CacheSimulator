@@ -4,6 +4,7 @@
 #include<math.h>
 #include<map>
 #include<vector>
+#include<utility>
 #define INPUT_SIZE 64
 
 using namespace std;
@@ -95,7 +96,6 @@ public:
 	}
 	bool remove(string input)
 	{
-		bool returnValue;
 		char offsetArray[20], indexArray[20], tagArray[100];
 		input.copy(offsetArray,offsetWidth,input.length()-offsetWidth);
 		offsetArray[offsetWidth] = '\0';
@@ -103,10 +103,40 @@ public:
 		indexArray[indexWidth] = '\0';
 		input.copy(tagArray,input.length()-offsetWidth-indexWidth,0);
 		tagArray[input.length()-offsetWidth-indexWidth] = '\0';
+		//cout<<"\nOffset = "<<offset<<endl;
+		//cout<<"\nIndex = "<<index<<endl;
+		//cout<<"\nTag = "<<tag<<endl;
+		//cout<<accessMethod<<" "<<inputBuffer<<endl;
+		string tag(tagArray);
+		string index(indexArray);
+		
+		Block *temp = NULL;
+		if(sets[index] == NULL)
+		{
+			return false;
+		}
+		else
+		{
+			temp = sets[index];
+			Block *temp1 = NULL;
+			for(temp1 = temp; temp1->next!=NULL; temp1=temp1->next)
+			{
+				if(temp1->next->tag == tag)
+				{
+					Block *temp2 = NULL;
+					temp2 = temp1->next;
+					temp1->next = temp2->next;
+					delete temp2;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
-	bool write(string input)		
+	pair<bool,string> write(string input)		
 	{
 		bool returnValue;
+		string returnString = "\0";
 		++writes;
 		//cout<<"Write called with tag "<<tag<<" and index "<<index<<endl;
 		char offsetArray[20], indexArray[20], tagArray[100];
@@ -170,15 +200,17 @@ public:
 			if(count == associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
+				returnString = temp1->next->tag;
 				delete temp1->next;
 				temp1->next = NULL;
 			}
 		}
-		return returnValue;
+		return make_pair(returnValue,returnString);
 	}
-	bool read(string input)
+	pair<bool,string> read(string input)
 	{
 		bool returnValue;
+		string returnString = "\0";
 		//cout<<"Read called with tag "<<tag<<" and index "<<index<<endl;
 		++reads;
 		char offsetArray[20], indexArray[20], tagArray[100];
@@ -206,7 +238,7 @@ public:
 			temp = sets[index];
 			temp->next = new Block();
 			temp->next->tag = tag;
-			return false;
+			returnValue = false;
 		}
 		else
 		{
@@ -244,11 +276,12 @@ public:
 			if(count == associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
+				returnString = temp1->next->tag;
 				delete temp1->next;
 				temp1->next = NULL;
 			}
 		}
-		return returnValue;
+		return make_pair(returnValue,returnString);
 	}
 };
 

@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 			{
 				//cout<<"Read "<<tagString<<" from "<<indexString<<"\n";
 				//l1.displayContent();
-				if(l1.read(input))
+				if(l1.read(input).first)
 				{
 					//cout<<"Hit\n";
 				}
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 			{
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
 				//l1.displayContent();
-				if(l1.write(input))
+				if(l1.write(input).first)
 				{
 				}
 				else
