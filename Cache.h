@@ -151,7 +151,8 @@ public:
 		//cout<<"\nTag = "<<tag<<endl;
 		//cout<<accessMethod<<" "<<inputBuffer<<endl;
 		string tag(tagArray);
-		string index(indexArray);	
+		string index(indexArray);
+		string offset(offsetArray);	
 
 		Block *temp = NULL;
 		if(sets[index] == NULL)
@@ -200,7 +201,10 @@ public:
 			if(count == associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
+				//cout<<"Tag = "<<temp1->next->tag<<" Index = "<<index<<" Offet = "<<offset<<endl;
 				returnString = temp1->next->tag;
+				returnString += index;
+				returnString += offset;
 				delete temp1->next;
 				temp1->next = NULL;
 			}
@@ -226,6 +230,8 @@ public:
 		//cout<<accessMethod<<" "<<inputBuffer<<endl;
 		string tag(tagArray);
 		string index(indexArray);
+		string offset(offsetArray);
+
 		Block *temp = NULL;
 		temp = sets[index];
 
@@ -276,7 +282,10 @@ public:
 			if(count == associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
+				//cout<<"Tag = "<<temp1->next->tag<<" Index = "<<index<<" Offet = "<<offset<<endl;
 				returnString = temp1->next->tag;
+				returnString += index;
+				returnString += offset;
 				delete temp1->next;
 				temp1->next = NULL;
 			}

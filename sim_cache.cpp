@@ -183,39 +183,21 @@ int main(int argc, char **argv)
 			string in(inputBuffer);
 			//cout<<"Converting "<<in<<" to Bin.\n";
 			string input = convertHexToBin(in);
-			
+
 			
 			if(strcmp(accessMethod,"r") == 0)
 			{
+				pair<bool,string> myPair = l1.read(input);
+				//l1.remove(input);
 				//cout<<"Read "<<tagString<<" from "<<indexString<<"\n";
 				//l1.displayContent();
-				if(l1.read(input).first)
-				{
-					//cout<<"Hit\n";
-				}
-				else
-				{
-					//cout<<"Miss\n";
-					if(l1.inclusion == 1)
-					{
-						l2.read(input);
-					}
-				}
 			}
 			else if(strcmp(accessMethod,"w") == 0)
 			{
+				pair<bool,string> myPair = l1.write(input);
+				//l1.remove(input);
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
-				//l1.displayContent();
-				if(l1.write(input).first)
-				{
-				}
-				else
-				{
-					if(l1.inclusion == 1)
-					{
-						l2.write(input);
-					}
-				}			
+				//l1.displayContent();		
 			}
 				
 
