@@ -51,7 +51,7 @@ public:
 		int i;
 		for(i=0;i<setNames.size();++i)
 		{
-			temp = sets[setNames[i]];
+			temp = sets[setNames[i]]->next;		//Change made
 			cout<<setNames[i]<<" ";
 			while(temp)
 			{
@@ -93,8 +93,9 @@ public:
 	{
 		cout<<"Message :"<<message<<"\n";
 	}
-	void write(string index, string tag)
+	bool write(string index, string tag)
 	{
+		bool returnValue;
 		++writes;
 		//cout<<"Write called with tag "<<tag<<" and index "<<index<<endl;
 		Block *temp = NULL;
@@ -102,6 +103,7 @@ public:
 		{
 			setNames.push_back(index);
 			++writeMisses;
+			returnValue = false;
 			sets[index] = new Block();
 			temp = sets[index];
 			temp->next = new Block();
@@ -119,6 +121,7 @@ public:
 				if(temp1->next->tag == tag)
 				{
 					++writeHits;
+					returnValue = true;
 					if(replacementPolicy == 1)
 					{
 						Block *temp2 = temp1->next;
@@ -129,27 +132,30 @@ public:
 					break;
 				}
 			}
-			if(temp1->next == NULL)
+			if(temp1->next == NULL && !returnValue)							//Change made
 			{
 				++writeMisses;
+				returnValue = false;
 				temp1 = new Block();
 				temp1->next = NULL;
 				temp1->tag = tag;
 				temp1->next = temp->next;
 				temp->next = temp1;
 			}
-			if(count == associativity)
+			if(count >= associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
 				delete temp1->next;
 				temp1->next = NULL;
 			}
 		}
+		return returnValue;
 	}
 	bool read(string index, string tag)
 	{
 		//cout<<"Read called with tag "<<tag<<" and index "<<index<<endl;
 		++reads;
+		bool returnValue;
 		Block *temp = NULL;
 		temp = sets[index];
 
@@ -157,11 +163,11 @@ public:
 		{
 			setNames.push_back(index);
 			++readMisses;
+			returnValue = false;
 			sets[index] = new Block();
 			temp = sets[index];
 			temp->next = new Block();
 			temp->next->tag = tag;
-			return false;
 		}
 		else
 		{
@@ -174,7 +180,8 @@ public:
 				//cout<<"Count = "<<count<<" "<<temp1->tag<<endl;
 				if(temp1->next->tag == tag)
 				{
-					++writeHits;
+					++readHits;							//Change made
+					returnValue = true;
 					if(replacementPolicy == 1)
 					{
 						Block *temp2 = temp1->next;
@@ -185,22 +192,24 @@ public:
 					break;
 				}
 			}
-			if(temp1->next == NULL)
+			if(temp1->next == NULL && !returnValue)						//Change made
 			{
 				++readMisses;
+				returnValue = false;
 				temp1 = new Block();
 				temp1->next = NULL;
 				temp1->tag = tag;
 				temp1->next = temp->next;
 				temp->next = temp1;
 			}
-			if(count == associativity)
+			if(count >= associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next != NULL; temp1 = temp1->next);
 				delete temp1->next;
 				temp1->next = NULL;
 			}
 		}
+		return returnValue;
 	}
 };
 

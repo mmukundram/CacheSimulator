@@ -200,18 +200,25 @@ int main(int argc, char **argv)
 				//l1.displayContent();
 				if(l1.read(indexString,tagString))
 				{
-					//cout<<"Hit\n";
+					//cout<<"Read hit\n";
 				}
 				else
 				{
-					//cout<<"Miss\n";
+					//cout<<"Read miss\n";
 				}
 			}
 			else if(strcmp(accessMethod,"w") == 0)
 			{
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
 				//l1.displayContent();
-				l1.write(indexString,tagString);			
+				if(l1.write(indexString,tagString))
+				{
+					//cout<<"Write hit\n";
+				}
+				else
+				{
+					//cout<<"Write miss\n";
+				}			
 			}
 			//l1.displayContent();	
 
