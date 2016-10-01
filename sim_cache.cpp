@@ -131,11 +131,11 @@ int main(int argc, char **argv)
 	if(argc == 9)
 	{
 
-		Cache l1;
+		Cache l1, l2;
 
 		sscanf(argv[1],"%d", &blockSize);
 		l1.blockSize = blockSize;
-		//Set l2.blockSize
+		l2.blockSize = blockSize;
 	
 		sscanf(argv[2],"%d", &l1Size);
 		l1.size = l1Size;
@@ -144,20 +144,21 @@ int main(int argc, char **argv)
 		l1.associativity = l1Associativity;
 
 		sscanf(argv[4],"%d", &l2Size);
-		//Set l2.size
+		l2.size = l2Size;
 
 		sscanf(argv[5],"%d", &l2Associativity);
-		//Set l2.associativity
+		l2.associativity = l2Associativity;
 
 		sscanf(argv[6],"%d", &replacementPolicy);
 		l1.replacementPolicy = replacementPolicy;
-		//Set l2.replacementPolicy
+		l2.replacementPolicy = replacementPolicy;
 
 		sscanf(argv[7],"%d", &inclusion);
 		l1.inclusion = inclusion;
-		//Set l2.inclusion
+		l2.inclusion = inclusion;
 
 		l1.initializeCache();
+		l2.initializeCache();
 
 		traceFile = fopen(argv[8],"r");
 
