@@ -93,10 +93,21 @@ public:
 	{
 		cout<<"Message :"<<message<<"\n";
 	}
-	void write(string index, string tag)
+	void write(string input)		
 	{
 		++writes;
 		//cout<<"Write called with tag "<<tag<<" and index "<<index<<endl;
+		char offsetArray[20], indexArray[20], tagArray[100];
+		input.copy(offsetArray,offsetWidth,input.length()-offsetWidth);
+		input.copy(indexArray,indexWidth,input.length()-offsetWidth-indexWidth);
+		input.copy(tagArray,input.length()-offsetWidth-indexWidth,0);
+		//cout<<"\nOffset = "<<offset<<endl;
+		//cout<<"\nIndex = "<<index<<endl;
+		//cout<<"\nTag = "<<tag<<endl;
+		//cout<<accessMethod<<" "<<inputBuffer<<endl;
+		string tag(tagArray);
+		string index(indexArray);	
+
 		Block *temp = NULL;
 		if(sets[index] == NULL)
 		{
@@ -146,10 +157,20 @@ public:
 			}
 		}
 	}
-	bool read(string index, string tag)
+	bool read(string input)
 	{
 		//cout<<"Read called with tag "<<tag<<" and index "<<index<<endl;
 		++reads;
+		char offsetArray[20], indexArray[20], tagArray[100];
+		input.copy(offsetArray,offsetWidth,input.length()-offsetWidth);
+		input.copy(indexArray,indexWidth,input.length()-offsetWidth-indexWidth);
+		input.copy(tagArray,input.length()-offsetWidth-indexWidth,0);
+		//cout<<"\nOffset = "<<offset<<endl;
+		//cout<<"\nIndex = "<<index<<endl;
+		//cout<<"\nTag = "<<tag<<endl;
+		//cout<<accessMethod<<" "<<inputBuffer<<endl;
+		string tag(tagArray);
+		string index(indexArray);
 		Block *temp = NULL;
 		temp = sets[index];
 

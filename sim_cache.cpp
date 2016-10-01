@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 		{
 			//Cache::printMessage("Trace file found.");
 		}
-		char inputBuffer[100], accessMethod[5], offset[10], index[10], tag[100];
+		char inputBuffer[100], accessMethod[5];
 		
 		while(true)
 		{
@@ -182,20 +182,13 @@ int main(int argc, char **argv)
 			string in(inputBuffer);
 			//cout<<"Converting "<<in<<" to Bin.\n";
 			string input = convertHexToBin(in);
-			input.copy(offset,l1.offsetWidth,input.length()-l1.offsetWidth);
-			input.copy(index,l1.indexWidth,input.length()-l1.offsetWidth-l1.indexWidth);
-			input.copy(tag,input.length()-l1.offsetWidth-l1.indexWidth,0);
-			//cout<<"\nOffset = "<<offset<<endl;
-			//cout<<"\nIndex = "<<index<<endl;
-			//cout<<"\nTag = "<<tag<<endl;
-			//cout<<accessMethod<<" "<<inputBuffer<<endl;
-			string tagString(tag);
-			string indexString(index);	
+			
+			
 			if(strcmp(accessMethod,"r") == 0)
 			{
 				//cout<<"Read "<<tagString<<" from "<<indexString<<"\n";
 				//l1.displayContent();
-				if(l1.read(indexString,tagString))
+				if(l1.read(input))
 				{
 					//cout<<"Hit\n";
 				}
@@ -208,7 +201,7 @@ int main(int argc, char **argv)
 			{
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
 				//l1.displayContent();
-				l1.write(indexString,tagString);			
+				l1.write(input);			
 			}
 				
 
