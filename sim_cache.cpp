@@ -183,8 +183,11 @@ int main(int argc, char **argv)
 			//cout<<"Converting "<<in<<" to Bin.\n";
 			string input = convertHexToBin(in);
 			input.copy(offset,l1.offsetWidth,input.length()-l1.offsetWidth);
+			offset[l1.offsetWidth] = '\0';
 			input.copy(index,l1.indexWidth,input.length()-l1.offsetWidth-l1.indexWidth);
+			index[l1.indexWidth] = '\0';
 			input.copy(tag,input.length()-l1.offsetWidth-l1.indexWidth,0);
+			tag[input.length()-l1.offsetWidth-l1.indexWidth] = '\0';
 			//cout<<"\nOffset = "<<offset<<endl;
 			//cout<<"\nIndex = "<<index<<endl;
 			//cout<<"\nTag = "<<tag<<endl;
@@ -210,7 +213,7 @@ int main(int argc, char **argv)
 				//l1.displayContent();
 				l1.write(indexString,tagString);			
 			}
-				
+			//l1.displayContent();	
 
 		}
 		

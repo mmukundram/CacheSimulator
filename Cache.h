@@ -129,7 +129,7 @@ public:
 					break;
 				}
 			}
-			if(!temp1->next)
+			if(temp1->next == NULL)
 			{
 				++writeMisses;
 				temp1 = new Block();
@@ -185,7 +185,7 @@ public:
 					break;
 				}
 			}
-			if(!temp1->next)
+			if(temp1->next == NULL)
 			{
 				++readMisses;
 				temp1 = new Block();
@@ -196,7 +196,7 @@ public:
 			}
 			if(count == associativity)
 			{
-				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
+				for(temp1 = temp->next; temp1->next->next != NULL; temp1 = temp1->next);
 				delete temp1->next;
 				temp1->next = NULL;
 			}
