@@ -168,7 +168,7 @@ public:
 		else
 		{
 			temp = sets[index];
-			Block *temp1 = NULL;
+			Block *temp1 = NULL, *temp3 = NULL;
 			int count = 0;
 			//cout<<"\n\n";
 			for(temp1 = temp; temp1->next!=NULL; temp1=temp1->next, ++count)
@@ -177,6 +177,7 @@ public:
 				if(temp1->next->tag == tag)
 				{
 					++writeHits;
+					temp1->next->dirty = true;
 					returnValue = true;
 					if(replacementPolicy == 0)
 					{
@@ -197,14 +198,19 @@ public:
 				temp1->tag = tag;
 				temp1->next = temp->next;
 				temp->next = temp1;
+				temp3 = temp1;
 			}
 			if(count == associativity)
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
 				//cout<<"Tag = "<<temp1->next->tag<<" Index = "<<index<<" Offet = "<<offset<<endl;
-				returnString = temp1->next->tag;
-				returnString += index;
-				returnString += offset;
+				if((temp1->next->dirty && inclusion == 1) || inclusion == 2)
+				{
+					returnString = temp1->next->tag;
+					returnString += index;
+					returnString += offset;
+					temp3->dirty = true;
+				}
 				delete temp1->next;
 				temp1->next = NULL;
 			}
@@ -283,9 +289,12 @@ public:
 			{
 				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
 				//cout<<"Tag = "<<temp1->next->tag<<" Index = "<<index<<" Offet = "<<offset<<endl;
-				returnString = temp1->next->tag;
-				returnString += index;
-				returnString += offset;
+				if((temp1->next->dirty && inclusion == 1) || inclusion == 2)
+				{
+					returnString = temp1->next->tag;
+					returnString += index;
+					returnString += offset;
+				}
 				delete temp1->next;
 				temp1->next = NULL;
 			}

@@ -188,6 +188,19 @@ int main(int argc, char **argv)
 			if(strcmp(accessMethod,"r") == 0)
 			{
 				pair<bool,string> myPair = l1.read(input);
+				if(l1.inclusion == 2)
+				{
+					if(!myPair.first)
+					{
+						l2.read(input);
+						l2.remove(input);
+						if(myPair.second != "\0")
+						{
+							l2.write(myPair.second);
+						}
+					}
+					l2.remove(input);
+				}
 				//l1.remove(input);
 				//cout<<"Read "<<tagString<<" from "<<indexString<<"\n";
 				//l1.displayContent();
@@ -195,6 +208,19 @@ int main(int argc, char **argv)
 			else if(strcmp(accessMethod,"w") == 0)
 			{
 				pair<bool,string> myPair = l1.write(input);
+				if(l1.inclusion == 2)
+				{
+					if(!myPair.first)
+					{
+						l2.read(input);
+						l2.remove(input);
+						if(myPair.second != "\0")
+						{
+							l2.write(myPair.second);
+						}
+					}
+					l2.remove(input);
+				}
 				//l1.remove(input);
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
 				//l1.displayContent();		
