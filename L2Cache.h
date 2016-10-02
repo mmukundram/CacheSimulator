@@ -1,4 +1,4 @@
-#include"Block.h"
+
 #include<iostream>
 #include<string>
 #include<math.h>
@@ -9,11 +9,11 @@
 
 using namespace std;
 
-class Cache
+class L2Cache
 {
 public:
 	vector<string> setNames;
-	Cache()
+	L2Cache()
 	{
 		readHits = writeHits = readMisses = writeMisses = reads = writes = 0;
 	}
@@ -279,119 +279,7 @@ public:
 			{
 				++readMisses;
 				returnValue = false;
-				temp1 = new Block();
-				temp1->next = NULL;
-				temp1->tag = tag;
-				temp1->next = temp->next;
-				temp->next = temp1;
 			}
-			if(count == associativity)
-			{
-				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
-				//cout<<"Tag = "<<temp1->next->tag<<" Index = "<<index<<" Offet = "<<offset<<endl;
-				if((temp1->next->dirty && (inclusion == 0 || inclusion == 1)) || inclusion == 2)
-				{
-					returnString = temp1->next->tag;
-					returnString += index;
-					returnString += offset;
-				}
-				delete temp1->next;
-				temp1->next = NULL;
-			}
-		}
-		return make_pair(returnValue,returnString);
-	}
-
-
-	pair<bool,string> read2(string input)
-	{
-		bool returnValue;
-		string returnString = "\0";
-		//cout<<"Read called with tag "<<tag<<" and index "<<index<<endl;
-		++reads;
-		char offsetArray[20], indexArray[20], tagArray[100];
-		input.copy(offsetArray,offsetWidth,input.length()-offsetWidth);
-		offsetArray[offsetWidth] = '\0';
-		input.copy(indexArray,indexWidth,input.length()-offsetWidth-indexWidth);
-		indexArray[indexWidth] = '\0';
-		input.copy(tagArray,input.length()-offsetWidth-indexWidth,0);
-		tagArray[input.length()-offsetWidth-indexWidth] = '\0';
-		//cout<<"\nOffset = "<<offset<<endl;
-		//cout<<"\nIndex = "<<index<<endl;
-		//cout<<"\nTag = "<<tag<<endl;
-		//cout<<accessMethod<<" "<<inputBuffer<<endl;
-		string tag(tagArray);
-		string index(indexArray);
-		string offset(offsetArray);
-
-		Block *temp = NULL;
-		temp = sets[index];
-
-		if(!temp)
-		{
-			setNames.push_back(index);
-			++readMisses;
-			returnValue = false;
-			/*
-			sets[index] = new Block();
-			temp = sets[index];
-			temp->next = new Block();
-			temp->next->tag = tag;
-			returnValue = false;
-			*/
-		}
-		else
-		{
-			temp = sets[index];
-			Block *temp1 = NULL;
-			int count = 0;
-			//cout<<"\n\n";
-			for(temp1 = temp; temp1->next!=NULL; temp1=temp1->next, ++count)
-			{
-				//cout<<"Count = "<<count<<" "<<temp1->tag<<endl;
-				if(temp1->next->tag == tag)
-				{
-					++readHits;
-					returnValue = true;
-					/*
-					if(replacementPolicy == 0)
-					{
-						Block *temp2 = temp1->next;
-						temp1->next = temp2->next;
-						temp2->next = temp->next;
-						temp->next = temp2;
-					}
-					*/
-					break;
-				}
-			}
-			if(!temp1->next && !returnValue)
-			{
-				++readMisses;
-				returnValue = false;
-				/*
-				temp1 = new Block();
-				temp1->next = NULL;
-				temp1->tag = tag;
-				temp1->next = temp->next;
-				temp->next = temp1;
-				*/
-			}
-			
-			if(count == associativity)
-			{
-				for(temp1 = temp->next; temp1->next->next ; temp1 = temp1->next);
-				//cout<<"Tag = "<<temp1->next->tag<<" Index = "<<index<<" Offet = "<<offset<<endl;
-				if((temp1->next->dirty && (inclusion == 0 || inclusion == 1)) || inclusion == 2)
-				{
-					returnString = temp1->next->tag;
-					returnString += index;
-					returnString += offset;
-				}
-				delete temp1->next;
-				temp1->next = NULL;
-			}
-			
 		}
 		return make_pair(returnValue,returnString);
 	}

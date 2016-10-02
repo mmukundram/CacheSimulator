@@ -188,6 +188,14 @@ int main(int argc, char **argv)
 			if(strcmp(accessMethod,"r") == 0)
 			{
 				pair<bool,string> myPair = l1.read(input);
+				if(l1.inclusion == 0)
+				{
+					if(!myPair.first)
+					{
+						if(!l2.read2(input).first)
+						l2.write(input);
+					}
+				}
 				if(l1.inclusion == 2)
 				{
 					if(!myPair.first)
@@ -208,6 +216,14 @@ int main(int argc, char **argv)
 			else if(strcmp(accessMethod,"w") == 0)
 			{
 				pair<bool,string> myPair = l1.write(input);
+				if(l1.inclusion == 0)
+				{
+					if(!myPair.first)
+					{
+						if(!l2.read2(input).first)
+						l2.write(input);
+					}
+				}
 				if(l1.inclusion == 2)
 				{
 					if(!myPair.first)
