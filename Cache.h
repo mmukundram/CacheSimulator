@@ -15,7 +15,7 @@ public:
 	vector<string> setNames;
 	Cache()
 	{
-		readHits = writeHits = readMisses = writeMisses = reads = writes = 0;
+		readHits = writeHits = readMisses = writeMisses = reads = writes = writeBacks = 0;
 	}
 	void initializeCache()
 	{
@@ -33,6 +33,7 @@ public:
 	int writeHits;
 	int writeMisses;
 	int writes;
+	int writeBacks;
 	int size;
 	int blockSize;
 	int associativity;
@@ -62,6 +63,7 @@ public:
 			cout<<"\n";
 		}
 	}
+	
 	void printCacheDetails()
 	{
 		cout<<"CACHE DETAILS"
@@ -75,16 +77,23 @@ public:
 		<<"\nIndex width = "<<indexWidth
 		<<"\nTag width = "<<tagWidth<<"\n";
 	}
-	void printCacheStatus()
+	void L1PrintCacheStatus()
 	{
-		cout<<"CACHE STATUS"
-		<<"\nRead hits = "<<readHits
-		<<"\nRead misses = "<<readMisses
-		<<"\nReads = "<<reads
-		<<"\nWrite hits = "<<writeHits
-		<<"\nWrite misses = "<<writeMisses
-		<<"\nWrites = "<<writes
-		<<"\nMiss rate = "<<(float)(readMisses+writeMisses)/(reads+writes)<<"\n";
+		cout<<"a. Number of L1 reads:\t"<<reads
+		<<"\nb. Number  of L1 read misses:\t"<<readMisses
+		<<"\nc. Number of L1 writes:\t"<<writes
+		<<"\nd. Number of L1 write misses:\t"<<writeMisses		
+		<<"\ne. L1 miss rate:\t"<<(float)(readMisses+writeMisses)/(reads+writes)
+		<<"\nf. Number of L1 writebacks:\t"<<writeBacks;
+	}
+	void L2PrintCacheStatus()
+	{
+		cout<<"\ng. Number of L2 reads:\t"<<reads
+		<<"\nh. Number  of L2 read misses:\t"<<readMisses
+		<<"\ni. Number of L2 writes:\t"<<writes
+		<<"\nj. Number of L2 write misses:\t"<<writeMisses		
+		<<"\nk. L2 miss rate:\t"<<(float)(readMisses+writeMisses)/(reads+writes)
+		<<"\nl. Number of L2 writebacks:\t"<<writeBacks;
 	}
 	static void printErrorMessage(string message)
 	{
@@ -215,6 +224,8 @@ public:
 				temp1->next = NULL;
 			}
 		}
+		if(returnString != "\0")
+			++writeBacks;
 		return make_pair(returnValue,returnString);
 	}
 	pair<bool,string> read(string input)
@@ -298,7 +309,9 @@ public:
 				delete temp1->next;
 				temp1->next = NULL;
 			}
-		}
+		}	
+		if(returnString != "\0")
+			++writeBacks;
 		return make_pair(returnValue,returnString);
 	}
 

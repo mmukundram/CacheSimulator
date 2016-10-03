@@ -158,7 +158,8 @@ int main(int argc, char **argv)
 		l2.inclusion = inclusion;
 
 		l1.initializeCache();
-		l2.initializeCache();
+		if(l2.associativity != 0)
+			l2.initializeCache();
 
 		traceFile = fopen(argv[8],"r");
 
@@ -188,6 +189,8 @@ int main(int argc, char **argv)
 			if(strcmp(accessMethod,"r") == 0)
 			{
 				pair<bool,string> myPair = l1.read(input);
+				if(l2.associativity != 0)
+				{
 				if(l1.inclusion == 0)
 				{
 					if(!myPair.first)
@@ -208,6 +211,7 @@ int main(int argc, char **argv)
 						}
 					}
 					l2.remove(input);
+				}
 				}
 				//l1.remove(input);
 				//cout<<"Read "<<tagString<<" from "<<indexString<<"\n";
@@ -216,6 +220,8 @@ int main(int argc, char **argv)
 			else if(strcmp(accessMethod,"w") == 0)
 			{
 				pair<bool,string> myPair = l1.write(input);
+				if(l2.associativity !=0)
+				{
 				if(l1.inclusion == 0)
 				{
 					if(!myPair.first)
@@ -236,6 +242,7 @@ int main(int argc, char **argv)
 						}
 					}
 					l2.remove(input);
+				}
 				}
 				//l1.remove(input);
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
@@ -247,9 +254,10 @@ int main(int argc, char **argv)
 		
 
 		//l1.printCacheDetails();
-		l1.printCacheStatus();
+		l1.L1PrintCacheStatus();
 		//l2.printCacheDetails();
-		l2.printCacheStatus();
+		l2.L2PrintCacheStatus();
+		cout<<"\nm. Total Memory Traffic:\t"<<l1.writeMisses+l1.readMisses+l1.writeBacks+l2.writeMisses+l2.readMisses+l2.writeBacks<<"\n";
 
 		
 
