@@ -188,6 +188,8 @@ int main(int argc, char **argv)
 			if(strcmp(accessMethod,"r") == 0)
 			{
 				pair<bool,string> myPair = l1.read(input);
+				if(l2.associativity)
+				{
 				if(l1.inclusion == 0)
 				{
 					if(!myPair.first)
@@ -212,9 +214,12 @@ int main(int argc, char **argv)
 				//l1.remove(input);
 				//cout<<"Read "<<tagString<<" from "<<indexString<<"\n";
 				//l1.displayContent();
+				}
 			}
 			else if(strcmp(accessMethod,"w") == 0)
 			{
+				if(l2.associativity)
+				{
 				pair<bool,string> myPair = l1.write(input);
 				if(l1.inclusion == 0)
 				{
@@ -239,7 +244,8 @@ int main(int argc, char **argv)
 				}
 				//l1.remove(input);
 				//cout<<"Write "<<tagString<<" into "<<indexString<<"\n";
-				//l1.displayContent();		
+				//l1.displayContent();	
+				}	
 			}
 				
 

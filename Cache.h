@@ -19,12 +19,15 @@ public:
 	}
 	void initializeCache()
 	{
+		if(blockSize && associativity)
+		{
 		numberOfBlocks = size/blockSize;
 		//blocks = new Block[numberOfBlocks];	
 		offsetWidth = log(blockSize)/log(2);
 		numberOfSets = size/(associativity*blockSize);
 		indexWidth = log(numberOfSets)/log(2);
 		tagWidth = INPUT_SIZE - offsetWidth - indexWidth;
+		}
 		
 	}
 	int readHits;
